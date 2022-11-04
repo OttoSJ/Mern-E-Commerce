@@ -1,9 +1,15 @@
-const express = require('express')
-const dotenv = require('dotenv')
-dotenv.config({ path: './config/config.env' })
-const products = require('./data/product')
+import express from 'express'
+import products from './data/product.js'
+import connnectDB from './config/db.js'
+import colors from 'colors'
+import dotenv from 'dotenv'
+dotenv.config()
+
 const PORT = process.env.PORT || 5000
 const app = express()
+
+// Connecting to database
+connnectDB()
 
 // Middelware
 app.use(express.json())
@@ -22,4 +28,8 @@ app.get('/api/products/:productId', (req, res) => {
   res.json(product)
 })
 
-app.listen(PORT, () => console.log(`Server is running or port ${PORT}`))
+app.listen(PORT, () =>
+  console.log(
+    `Server is in ${process.env.NODE_ENV} running or port ${PORT}`.white
+  )
+)
