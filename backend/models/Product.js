@@ -31,31 +31,31 @@ const productSchema = mongoose.Schema(
       required: true,
     },
     category: {
-      type: Boolean,
+      type: String,
       required: true,
     },
-    descrition: {
-      type: Boolean,
+    description: {
+      type: String,
       required: true,
     },
     reviews: [reviewSchema],
     rating: {
-      type: Boolean,
+      type: Number,
       required: true,
       default: 0,
     },
     numReviews: {
-      type: Boolean,
+      type: Number,
       required: true,
       default: 0,
     },
     price: {
-      type: Boolean,
+      type: Number,
       required: true,
       default: 0,
     },
     countInStock: {
-      type: Boolean,
+      type: Number,
       required: true,
       default: 0,
     },

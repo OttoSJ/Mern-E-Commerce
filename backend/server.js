@@ -1,11 +1,15 @@
 import express from 'express'
-import products from './data/product.js'
 import connnectDB from './config/db.js'
 import colors from 'colors'
 import dotenv from 'dotenv'
 dotenv.config()
 
+// Load env vars
 const PORT = process.env.PORT || 5000
+
+// Routes files
+import products from './routes/products_routes.js'
+
 const app = express()
 
 // Connecting to database
@@ -15,17 +19,12 @@ connnectDB()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Routes
+
+app.use('/api/products', products)
+
 app.get('/', (req, res) => {
   res.send('Api is running')
-})
-
-app.get('/api/products', (req, res) => {
-  res.json(products)
-})
-
-app.get('/api/products/:productId', (req, res) => {
-  const product = products.find((p) => p._id === req.params.productId)
-  res.json(product)
 })
 
 app.listen(PORT, () =>
