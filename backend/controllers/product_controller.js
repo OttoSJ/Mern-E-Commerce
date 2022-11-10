@@ -6,12 +6,13 @@ import asyncHandler from 'express-async-handler'
 // @access Public
 const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({})
-
+  // res.status(401)
+  // throw new Error('Not Authorized')
   res.status(200).json({ success: true, data: products })
 })
 
 // @desc Get single product
-// @route GET /api/:productId
+// @route GET /api/products/:productId
 // @access Public
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.productId)

@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import productsAPI from "../apiCalls/productListApiCall"
+import singleProductAPI from "../apiCalls/singleProductApiCall"
 
 const initialState = {
-  products: [],
+  product: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 }
 
-export const getProductList = createAsyncThunk(
-  "getAllProducts",
-  async (_, thuckAPI) => {
+export const getProductById = createAsyncThunk(
+  "getProductById",
+  async (productId, thuckAPI) => {
     try {
-      return await productsAPI.getAllProducts()
+      return await singleProductAPI.getSingleProduct(productId)
     } catch (error) {
       const message =
         (error.message && error.response.data && error.response.data.message) ||
@@ -24,8 +24,8 @@ export const getProductList = createAsyncThunk(
   }
 )
 
-export const productReducer = createSlice({
-  name: "products",
+export const singleProductReducer = createSlice({
+  name: "product",
   initialState,
   reducers: {
     reset: (state) => initialState,
@@ -33,15 +33,15 @@ export const productReducer = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getProductList.pending, (state) => {
+      .addCase(getProductById.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(getProductList.fulfilled, (state, action) => {
+      .addCase(getProductById.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.products = action.payload
+        state.product = action.payload
       })
-      .addCase(getProductList.rejected, (state, action) => {
+      .addCase(getProductById.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
@@ -49,5 +49,5 @@ export const productReducer = createSlice({
   },
 })
 
-export const { reset } = productReducer.actions
-export default productReducer.reducer
+export const { reset } = singleProductReducer.actions
+export default singleProductReducer.reducer

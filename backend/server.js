@@ -1,6 +1,7 @@
 import express from 'express'
 import connnectDB from './config/db.js'
 import colors from 'colors'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 dotenv.config()
@@ -17,6 +18,7 @@ const app = express()
 connnectDB()
 
 // Middelware
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
