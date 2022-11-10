@@ -1,20 +1,24 @@
-import React, { useEffect } from "react"
-import { Link } from "react-router-dom"
-import { useParams } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap"
-import { getProductById } from "../redux-features/reducers_ajaxCalls/singleProductReducer"
-import Rating from "../components/Rating"
-import Loader from "../components/Loader"
-import Message from "../components/Message"
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
+import { getProductById } from '../redux-features/reducers_ajaxCalls/singleProductReducer'
+import { addCartItem } from '../redux-features/reducers_ajaxCalls/cartReducer'
+import Rating from '../components/Rating'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 const ProductScreen = () => {
+  const [qty, setQty] = useState(0)
+
   let { product, isLoading, isError, message } = useSelector(
     (state) => state.productDetails
   )
   product = product.data
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const params = useParams()
 
@@ -22,6 +26,11 @@ const ProductScreen = () => {
     dispatch(getProductById(params.productId))
   }, [dispatch, params.productId])
 
+  const addToCartHandler = () => {
+    dispatch(addCartItem(params.productId))
+    console.log(product)
+    navigate(`/cart/${params.productId}?qty=${qty}`)
+  }
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -52,7 +61,7 @@ const ProductScreen = () => {
                 Description: {product?.description}
               </ListGroup.Item>
             </ListGroup>
-          </Col>{" "}
+          </Col>{' '}
           <Col md={3}>
             <Card>
               <ListGroup variant="flush">
@@ -70,19 +79,40 @@ const ProductScreen = () => {
                   <Row>
                     <Col>Status</Col>
                     <Col>
-                      {product?.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                      {product?.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                {product?.countInStock > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col className="my-2">Qty</Col>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          value={qty}
+                          onChange={(e) => setQty(e.target.value)}
+                        >
+                          {[...Array(product?.countInStock).keys()].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
                 <ListGroup>
                   <Button
+                    onClick={addToCartHandler}
                     className="btn-block"
                     type="button"
                     disabled={product?.countInStock === 0}
                   >
                     {product?.countInStock === 0
-                      ? "Out Of Stock"
-                      : "Add To Cart"}
+                      ? 'Out Of Stock'
+                      : 'Add To Cart'}
                   </Button>
                 </ListGroup>
               </ListGroup>

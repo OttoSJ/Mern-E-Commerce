@@ -1,17 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import singleProductAPI from "../apiCalls/singleProductApiCall"
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import singleProductAPI from '../apiCalls/singleProductApiCall'
 
 const initialState = {
-  product: {},
+  product: { reviews: [] },
+  // product: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: "",
+  message: '',
 }
 
 export const getProductById = createAsyncThunk(
-  "getProductById",
-  async (productId, thuckAPI) => {
+  'getProductById',
+  async (productId, thunkAPI) => {
     try {
       return await singleProductAPI.getSingleProduct(productId)
     } catch (error) {
@@ -19,13 +20,13 @@ export const getProductById = createAsyncThunk(
         (error.message && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString()
-      return thuckAPI.rejectWithValue(message)
+      return thunkAPI.rejectWithValue(message)
     }
   }
 )
 
 export const singleProductReducer = createSlice({
-  name: "product",
+  name: 'product',
   initialState,
   reducers: {
     reset: (state) => initialState,
