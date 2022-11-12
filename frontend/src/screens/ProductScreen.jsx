@@ -10,7 +10,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 
 const ProductScreen = () => {
-  const [qty, setQty] = useState(0)
+  const [qty, setQty] = useState(1)
 
   let { product, isLoading, isError, message } = useSelector(
     (state) => state.productDetails
@@ -27,10 +27,9 @@ const ProductScreen = () => {
   }, [dispatch, params.productId])
 
   const addToCartHandler = () => {
-    dispatch(addCartItem(params.productId))
-    console.log(product)
     navigate(`/cart/${params.productId}?qty=${qty}`)
   }
+
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
@@ -94,9 +93,7 @@ const ProductScreen = () => {
                           onChange={(e) => setQty(e.target.value)}
                         >
                           {[...Array(product?.countInStock).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
+                            <option key={x + 1}>{Number(x) + 1}</option>
                           ))}
                         </Form.Control>
                       </Col>

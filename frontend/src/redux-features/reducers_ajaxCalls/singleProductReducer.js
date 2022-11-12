@@ -3,7 +3,6 @@ import singleProductAPI from '../apiCalls/singleProductApiCall'
 
 const initialState = {
   product: { reviews: [] },
-  // product: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -38,9 +37,11 @@ export const singleProductReducer = createSlice({
         state.isLoading = true
       })
       .addCase(getProductById.fulfilled, (state, action) => {
+        // console.log(action.payload)
         state.isLoading = false
         state.isSuccess = true
         state.product = action.payload
+        // console.log('Product', state.product)
       })
       .addCase(getProductById.rejected, (state, action) => {
         state.isLoading = false

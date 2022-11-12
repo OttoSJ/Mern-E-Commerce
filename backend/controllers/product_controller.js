@@ -25,4 +25,13 @@ const getProductById = asyncHandler(async (req, res) => {
   }
 })
 
-export { getAllProducts, getProductById }
+// @desc Delete single product by id
+// @route DELETE /api/products/:productId
+// @access Private
+const deleteProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findByIdAndDelete(req.params.productId)
+
+  res.status(200).json({ success: true, data: product })
+})
+
+export { getAllProducts, getProductById, deleteProduct }
