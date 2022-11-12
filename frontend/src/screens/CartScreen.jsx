@@ -1,16 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Form,
-  Button,
-  Card,
-  Container,
-} from 'react-bootstrap'
+import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
 import {
   addCartItem,
@@ -113,7 +104,9 @@ const CartScreen = () => {
               disabled={cartItems.length === 0}
               onClick={checkoutHandler}
             >
-              Proceed To Checkout
+              {cartItems.length === 0
+                ? 'Your Cart Is Empty'
+                : 'Proceed To Checkout'}
             </Button>
           </ListGroup>
         </Card>
