@@ -4,6 +4,7 @@ import {
   getUserById,
   createUser,
   userLogin,
+  updateUser,
 } from '../controllers/user_controller.js'
 
 import { protect } from '../middleware/auth_middleware.js'
@@ -17,5 +18,7 @@ router.get('/getme', protect, getUserById)
 router.post('/', createUser)
 
 router.post('/login', userLogin)
+
+router.put('/', protect, updateUser)
 
 export default router

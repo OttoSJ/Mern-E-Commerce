@@ -1,3 +1,7 @@
+body {
+  min-height: 100vh;
+  min-width: 100vh;
+}
 main {
   min-height: 80vh;
   min-width: 100vh;

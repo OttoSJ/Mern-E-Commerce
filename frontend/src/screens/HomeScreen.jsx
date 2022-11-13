@@ -1,10 +1,10 @@
-import React, { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { Row, Col } from "react-bootstrap"
-import Product from "../components/Product"
-import Loader from "../components/Loader"
-import Message from "../components/Message"
-import { getProductList } from "../redux-features/reducers_ajaxCalls/productListReducer"
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Row, Col } from 'react-bootstrap'
+import Product from '../components/Product'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
+import { getProductList } from '../redux-features/reducers_ajaxCalls/productListReducer'
 
 const HomeScreen = () => {
   const {

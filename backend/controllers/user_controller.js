@@ -40,7 +40,7 @@ const createUser = asyncHandler(async (req, res) => {
 })
 
 // @desc Login user
-// @route GET /api/users/login
+// @route POST /api/users/login
 // @access Private
 const userLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body
@@ -60,4 +60,27 @@ const userLogin = asyncHandler(async (req, res) => {
   }
 })
 
-export { getAllUsers, getUserById, userLogin, createUser }
+// @desc Login user
+// @route POST /api/users
+// @access Private
+const updateUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body
+  const user = await Users.findOne({ email: req.user.email })
+
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  user.name = name
+  user.email = email
+
+  if (password) {
+    user.password = password
+  }
+
+  user.save()
+
+  res.status(200).json({ success: true, data: user })
+})
+
+export { getAllUsers, getUserById, userLogin, createUser, updateUser }
