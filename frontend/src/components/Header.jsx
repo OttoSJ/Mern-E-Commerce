@@ -11,8 +11,6 @@ const Header = () => {
   const navigate = useNavigate()
   const { cartItems } = cart
 
-  // useEffect(() => {}, [user])
-
   const logoutHandler = () => {
     dispatch(logout())
     navigate('/')

@@ -71,9 +71,11 @@ const updateUser = async (userInfo) => {
     email: data.email,
     isAdmin: data.isAdmin,
     token: userInfo.token,
+    success: false,
   }
 
   if (data) {
+    updatedUser.success = true
     localStorage.setItem('user', JSON.stringify(updatedUser))
   }
 

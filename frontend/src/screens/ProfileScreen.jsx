@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Button, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import FormContainer from '../components/FormContainer.jsx'
 import { updateUser } from '../redux-features/reducers_ajaxCalls/authReducer.js'
 
 const ProfileScreen = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [success, setSuccess] = useState(false)
 
   const [userMessage, setUserMessage] = useState(null)
   const { isLoading, isError, user, message } = useSelector(
@@ -16,24 +17,19 @@ const ProfileScreen = () => {
   )
 
   const [updateUserInfo, setUpdateUserInfo] = useState({
-    name: user.name,
-    email: user.email,
+    name: user?.name,
+    email: user?.email,
     password: '',
     confirmPassword: '',
-    token: user.token,
+    token: user?.token,
   })
   const { name, email, password, confirmPassword } = updateUserInfo
 
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  const redirect = location.search ? location.search.split('=')[1] : '/'
-
-  //   useEffect(() => {
-  //     if (user) {
-  //       navigate(redirect)
-  //     }
-  //   }, [navigate, user, redirect])
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [navigate, user])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -42,8 +38,11 @@ const ProfileScreen = () => {
     }
     dispatch(updateUser(updateUserInfo))
 
-    if (user) {
-      navigate('/')
+    if (user.success) {
+      setSuccess(true)
+      setTimeout(() => {
+        setSuccess(false)
+      }, 3000)
     }
   }
   const onChange = (e) => {
@@ -52,21 +51,24 @@ const ProfileScreen = () => {
       [e.target.name]: e.target.value,
     }))
   }
-  console.log(updateUserInfo)
+
   return (
-    <>
-      <h1>User Profile</h1>
-      {userMessage && <Message variant="danger">{userMessage}</Message>}
-      {isError && <Message variant="danger">{message}</Message>}
-      {isLoading && <Loader />}
-      <FormContainer>
+    <Row>
+      <Col md={4}>
+        <h2>User Profile</h2>
+        {userMessage && <Message variant="danger">{userMessage}</Message>}
+        {isError && <Message variant="danger">{message}</Message>}
+        {success && (
+          <Message variant="success">Your profile has been updated!</Message>
+        )}
+        {isLoading && <Loader />}
         <Form onSubmit={onSubmit}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="name"
               name="name"
-              defaultValue={user ? user.name : null}
+              defaultValue={user ? name : null}
               placeholder={!user ? 'Enter name' : null}
               onChange={(e) => onChange(e)}
             ></Form.Control>
@@ -76,7 +78,7 @@ const ProfileScreen = () => {
             <Form.Control
               type="email"
               name="email"
-              defaultValue={user ? user.email : null}
+              defaultValue={user ? email : null}
               placeholder={!user ? 'Enter email' : null}
               onChange={(e) => onChange(e)}
             ></Form.Control>
@@ -86,8 +88,7 @@ const ProfileScreen = () => {
             <Form.Control
               type="password"
               name="password"
-              defaultValue={user ? user.password : null}
-              placeholder={!user ? 'Enter password' : null}
+              placeholder={'Enter password'}
               onChange={(e) => onChange(e)}
             ></Form.Control>
           </Form.Group>
@@ -96,8 +97,7 @@ const ProfileScreen = () => {
             <Form.Control
               type="password"
               name="confirmPassword"
-              defaultValue={user ? user.password : null}
-              placeholder={!user ? 'Enter password' : null}
+              placeholder={'Enter password'}
               onChange={(e) => onChange(e)}
             ></Form.Control>
           </Form.Group>
@@ -105,19 +105,12 @@ const ProfileScreen = () => {
             Submit
           </Button>
         </Form>
-        {/* <Row className="py-3">
-          <Col>
-            Have an Account ?
-            <Link
-              className="mx-2"
-              to={redirect ? `/login?redirect=${redirect}` : '/login'}
-            >
-              Login
-            </Link>
-          </Col>
-        </Row> */}
-      </FormContainer>
-    </>
+      </Col>
+      <Col md={7} className="mx-4">
+        {' '}
+        <h2>My Orders</h2>
+      </Col>
+    </Row>
   )
 }
 

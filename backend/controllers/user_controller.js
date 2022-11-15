@@ -78,7 +78,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.password = password
   }
 
-  user.save()
+  await user.save()
 
   res.status(200).json({ success: true, data: user })
 })
