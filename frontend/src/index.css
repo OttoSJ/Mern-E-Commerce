@@ -33,3 +33,7 @@ h2 {
   border-radius: 45px;
   background-color: aliceblue;
 }
+
+.required {
+  color: red;
+}

@@ -3,6 +3,8 @@ import productsReducer from '../redux-features/reducers_ajaxCalls/productListRed
 import productDetailsReducer from '../redux-features/reducers_ajaxCalls/singleProductReducer'
 import cartReducer from '../redux-features/reducers_ajaxCalls/cartReducer'
 import userReducer from '../redux-features/reducers_ajaxCalls/authReducer'
+import shippingReducer from '../redux-features/reducers_ajaxCalls/shippingReducer'
+import paymentReducer from '../redux-features/reducers_ajaxCalls/paymentMethodReducer'
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +12,7 @@ export const store = configureStore({
     productDetails: productDetailsReducer,
     cart: cartReducer,
     auth: userReducer,
+    shipping: shippingReducer,
+    paymentMethod: paymentReducer,
   },
 })

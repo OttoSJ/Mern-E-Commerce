@@ -5,8 +5,18 @@ const cartItemsFromLocalStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
   : []
 
+const shippingInfoFromLocalStorage = localStorage.getItem('shipping')
+  ? JSON.parse(localStorage.getItem('shipping'))
+  : {}
+
+const paymentMethodFromLocalStorage = localStorage.getItem('paymentMethod')
+  ? JSON.parse(localStorage.getItem('paymentMethod'))
+  : null
+
 const initialState = {
   cartItems: cartItemsFromLocalStorage,
+  shippingAddress: shippingInfoFromLocalStorage,
+  paymentMethod: paymentMethodFromLocalStorage,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -103,7 +113,6 @@ export const cartReducer = createSlice({
         )
         localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
       })
-
       .addCase(removeCartItem.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true

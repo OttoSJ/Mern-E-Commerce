@@ -25,17 +25,18 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (user) {
-      navigate(redirect)
+      // navigate(`/`)
+      navigate(`/${redirect}`)
     } else {
       dispatch(reset())
     }
-    console.log(user)
-  }, [navigate, user, redirect])
+  }, [navigate, user, redirect, dispatch])
 
   const onSubmit = (e) => {
     e.preventDefault()
     dispatch(login(loginInfo))
-    navigate('/')
+    console.log(redirect)
+    navigate(`${redirect}`)
   }
   const onChange = (e) => {
     setLoginInfo((prevState) => ({

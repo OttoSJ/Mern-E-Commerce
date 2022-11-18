@@ -45,6 +45,7 @@ const ProfileScreen = () => {
       }, 3000)
     }
   }
+
   const onChange = (e) => {
     setUpdateUserInfo((prevState) => ({
       ...prevState,

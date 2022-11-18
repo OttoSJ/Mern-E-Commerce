@@ -3,15 +3,25 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../redux-features/reducers_ajaxCalls/authReducer'
+import { reset } from '../redux-features/reducers_ajaxCalls/authReducer'
 
 const Header = () => {
   const cart = useSelector((state) => state.cart)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { cartItems } = cart
+  let { cartItems } = cart
+
+  useEffect(() => {
+    if (!user) {
+      // dispatch(reset())
+    }
+  }, [user, navigate, cartItems])
 
   const logoutHandler = () => {
+    // localStorage.removeItem('shipping')
+    // localStorage.removeItem('paymentMethod')
+    // localStorage.removeItem('cartItems')
     dispatch(logout())
     navigate('/')
   }
@@ -29,7 +39,9 @@ const Header = () => {
             className="justify-content-end"
           >
             <Nav className="ml-auto">
-              <span className="cart-items">{cartItems.length}</span>
+              <span className="cart-items">
+                {cartItems.length === 0 ? 0 : cartItems.length}
+              </span>
               <Nav.Link as={Link} to="/cart">
                 {' '}
                 <i className="fas fa-shopping-cart"></i> Cart
