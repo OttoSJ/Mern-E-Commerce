@@ -16,8 +16,9 @@ const initialState = {
 export const savePaymentMethod = createAsyncThunk(
   'savePaymentMethod',
   async (paymentMethod, thunkAPI) => {
+    // const cart = thunkAPI.getState().cart
     try {
-      return await paymentAPI.paymentMethod(paymentMethod)
+      return await paymentAPI.paymentMethod(paymentMethod, thunkAPI)
     } catch (error) {
       const message =
         (error.response &&

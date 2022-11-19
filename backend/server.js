@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 5000
 // Routes files
 import products from './routes/products_routes.js'
 import users from './routes/user_routes.js'
+import orders from './routes/order_routes.js'
 
 const app = express()
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/products', products)
 app.use('/api/users', users)
+app.use('/api/orders', orders)
 
 app.get('/', (req, res) => {
   res.send('Api is running')

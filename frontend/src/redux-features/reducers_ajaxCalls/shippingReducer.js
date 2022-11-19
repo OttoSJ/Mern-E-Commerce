@@ -17,7 +17,7 @@ export const saveShippingAddress = createAsyncThunk(
   'saveShippingAddress',
   async (shippingInfo, thunkAPI) => {
     try {
-      return await shippingAPI.shippingAddress(shippingInfo)
+      return await shippingAPI.shippingAddress(shippingInfo, thunkAPI)
     } catch (error) {
       const message =
         (error.response &&

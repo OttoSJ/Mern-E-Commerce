@@ -46,12 +46,9 @@ const PaymentScreen = () => {
       <FormContainer>
         <h1>Payment Method</h1>
         <Form onSubmit={onSubmit}>
-          <Row>
-            <Form.Group>
-              <Form.Label as="legend">Select Mehtod</Form.Label>
-            </Form.Group>
-          </Row>
-          <Row>
+          <Form.Group>
+            <Form.Label as="legend">Select Mehtod</Form.Label>
+
             <ButtonGroup>
               <Col>
                 {radios.map((radio, idx) => (
@@ -60,7 +57,6 @@ const PaymentScreen = () => {
                     id={`radio-${idx}`}
                     label={radio.value}
                     type="radio"
-                    className="mx-3"
                     name="radio"
                     value={radio.value}
                     checked={radioValue === radio.value}
@@ -69,7 +65,8 @@ const PaymentScreen = () => {
                 ))}
               </Col>
             </ButtonGroup>
-          </Row>
+          </Form.Group>
+
           <Button
             type="submit"
             variant="primary"

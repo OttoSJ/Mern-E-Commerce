@@ -24,7 +24,7 @@ const CheckoutSteps = ({ step }) => {
         )}
       </Nav.Item>
       <Nav.Item>
-        {step === 3 ? (
+        {step >= 3 ? (
           <LinkContainer to="/payment">
             <Nav.Link>Payment</Nav.Link>
           </LinkContainer>
@@ -33,7 +33,7 @@ const CheckoutSteps = ({ step }) => {
         )}
       </Nav.Item>
       <Nav.Item>
-        {step === 4 ? (
+        {step >= 4 ? (
           <LinkContainer to="/placeorder">
             <Nav.Link>Place Order</Nav.Link>
           </LinkContainer>
