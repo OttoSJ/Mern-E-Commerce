@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Loader from '../components/Loader.jsx'
 import Message from '../components/Message'
 import { getOrderDetails } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
@@ -20,7 +20,7 @@ const OrderScreen = () => {
     if (!order || order._id !== params.orderId) {
       dispatch(getOrderDetails(params.orderId))
     }
-  }, [dispatch, params.orderId])
+  }, [dispatch, params.orderId, order])
 
   return isLoading ? (
     <Loader />
