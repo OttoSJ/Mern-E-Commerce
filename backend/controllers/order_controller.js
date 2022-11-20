@@ -10,13 +10,21 @@ const getAllOrders = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: orders })
 })
 
-// @desc Get single order
+// @desc Get single order by id
 // @route GET /api/orders/:orderId
 // @access Private
 const getSingleOrder = asyncHandler(async (req, res) => {
-  const orders = await Orders.findById(req.params.orderId)
+  const order = await Orders.findById(req.params.orderId).populate(
+    'user',
+    'name email'
+  )
 
-  res.status(200).json({ success: true, data: orders })
+  if (!order) {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+
+  res.status(200).json({ success: true, data: order })
 })
 
 // @desc Create an order

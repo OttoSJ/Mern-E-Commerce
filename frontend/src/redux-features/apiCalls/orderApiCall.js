@@ -8,10 +8,9 @@ const createOrder = async (orderInfo) => {
     },
   }
 
-  console.log('Order Created', orderInfo.cartItems)
   const orderDetails = {
     orderItems: orderInfo.cartItems,
-    shippingAddress: orderInfo.shipping,
+    shippingAddress: orderInfo.shippingAddress,
     paymentMethod: orderInfo.paymentMethod,
     taxPrice: orderInfo.taxPrice,
     shippingPrice: orderInfo.shippingPrice,
@@ -22,12 +21,29 @@ const createOrder = async (orderInfo) => {
     data: { data },
   } = await axios.post(`/api/orders`, orderDetails, config)
 
-  console.log(data)
+  return data
+}
+
+const getOrder = async (orderId) => {
+  const userToken = JSON.parse(localStorage.getItem('user')).token
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userToken}`,
+    },
+  }
+
+  const {
+    data: { data },
+  } = await axios.get(`/api/orders/${orderId}`, config)
 
   return data
 }
+
 const orderAPI = {
   createOrder,
+  getOrder,
 }
 
 export default orderAPI

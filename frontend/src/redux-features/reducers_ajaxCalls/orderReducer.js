@@ -1,12 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import orderAPI from '../apiCalls/orderApiCall'
 
-const orderFromLocalStorage = {
-  shipping: JSON.parse(localStorage.getItem('shipping')),
-  user: JSON.parse(localStorage.getItem('user')),
-  paymentMethod: JSON.parse(localStorage.getItem('paymentMethod')),
-  orderItems: JSON.parse(localStorage.getItem('cartItems')),
-}
+const orderFromLocalStorage = localStorage.getItem('order')
+  ? JSON.parse(localStorage.getItem('order'))
+  : {}
 
 const initialState = {
   order: orderFromLocalStorage,
@@ -21,6 +18,23 @@ export const addOrder = createAsyncThunk(
   async (orderInfo, thunkAPI) => {
     try {
       return await orderAPI.createOrder(orderInfo)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const getOrderDetails = createAsyncThunk(
+  'getOrderDetails',
+  async (orderInfo, thunkAPI) => {
+    try {
+      return await orderAPI.getOrder(orderInfo)
     } catch (error) {
       const message =
         (error.response &&
@@ -53,6 +67,21 @@ export const orderReducer = createSlice({
         localStorage.setItem('order', JSON.stringify(action.payload))
       })
       .addCase(addOrder.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getOrderDetails.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getOrderDetails.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.order = action.payload
+
+        localStorage.setItem('order', JSON.stringify(action.payload))
+      })
+      .addCase(getOrderDetails.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
