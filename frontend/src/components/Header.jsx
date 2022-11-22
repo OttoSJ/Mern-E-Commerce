@@ -4,8 +4,10 @@ import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../redux-features/reducers_ajaxCalls/authReducer'
 import { reset } from '../redux-features/reducers_ajaxCalls/authReducer'
+import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer.js'
+import { reset as resetOrder } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
 
-const Header = () => {
+const Header = ({ hasCartItems }) => {
   const cart = useSelector((state) => state.cart)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
@@ -14,15 +16,19 @@ const Header = () => {
 
   useEffect(() => {
     if (!user) {
-      // dispatch(reset())
+      dispatch(resetCart())
     }
-  }, [user, navigate, cartItems])
+  }, [user, navigate, cartItems, dispatch])
+
+  console.log(hasCartItems)
 
   const logoutHandler = () => {
-    // localStorage.removeItem('shipping')
-    // localStorage.removeItem('paymentMethod')
-    // localStorage.removeItem('cartItems')
     dispatch(logout())
+    dispatch(reset())
+    localStorage.removeItem('cartItems')
+    dispatch(resetCart())
+    dispatch(resetOrder())
+
     navigate('/')
   }
 
@@ -40,7 +46,7 @@ const Header = () => {
           >
             <Nav className="ml-auto">
               <span className="cart-items">
-                {cartItems.length === 0 ? 0 : cartItems.length}
+                {!hasCartItems ? 0 : cartItems.length}
               </span>
               <Nav.Link as={Link} to="/cart">
                 {' '}

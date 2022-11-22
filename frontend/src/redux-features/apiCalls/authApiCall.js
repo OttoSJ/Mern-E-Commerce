@@ -28,6 +28,12 @@ const loginUser = async (userLoginInfo) => {
 
 const logoutUser = async () => {
   localStorage.removeItem('user')
+  localStorage.removeItem('order')
+  localStorage.removeItem('shipping')
+  localStorage.removeItem('paymentMethod')
+  localStorage.removeItem('myOrders')
+  localStorage.removeItem('cartItems')
+  localStorage.removeItem('__paypal_storage__')
 }
 
 const register = async (userInfo) => {

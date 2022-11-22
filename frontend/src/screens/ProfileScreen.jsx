@@ -33,7 +33,6 @@ const ProfileScreen = () => {
   })
   const { name, email, password, confirmPassword } = updateUserInfo
 
-  console.log(myOrders[0].isDelivered)
   useEffect(() => {
     if (!user) {
       navigate('/login')

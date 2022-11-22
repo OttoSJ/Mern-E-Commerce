@@ -7,22 +7,28 @@ import {
   addCartItem,
   removeCartItem,
 } from '../redux-features/reducers_ajaxCalls/cartReducer'
+import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer.js'
 
 const CartScreen = () => {
   const { productId } = useParams()
   let location = useLocation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth)
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
 
   let qty = location.search ? Number(location.search.split('=')[1]) : 1
 
   useEffect(() => {
+    if (!user) {
+      dispatch(resetCart())
+      navigate('/')
+    }
     if (productId) {
       dispatch(addCartItem({ productId, qty }))
     }
-  }, [dispatch, productId, qty])
+  }, [dispatch, productId, qty, user, navigate])
 
   const updateQty = (e, item) => {
     dispatch(
@@ -42,11 +48,7 @@ const CartScreen = () => {
     <Row>
       <Col md={8}>
         <h1>Shopping Cart</h1>
-        {cartItems.length === 0 ? (
-          <Message>
-            Your cart is empty <Link to="/">Go Back</Link>
-          </Message>
-        ) : (
+        {cartItems.length > 0 ? (
           <ListGroup variant="flush">
             {cartItems.map((item) => (
               <ListGroup.Item key={item.product}>
@@ -82,6 +84,10 @@ const CartScreen = () => {
               </ListGroup.Item>
             ))}
           </ListGroup>
+        ) : (
+          <Message>
+            Your cart is empty <Link to="/">Go Back</Link>
+          </Message>
         )}
       </Col>
       <Col md={4}>
@@ -90,12 +96,15 @@ const CartScreen = () => {
             <ListGroup.Item>
               <h2>
                 Total items (
-                {cartItems.reduce((total, item) => total + item.qty, 0)})
+                {cartItems &&
+                  cartItems.reduce((total, item) => total + item.qty, 0)}
+                )
               </h2>
               $
-              {cartItems
-                .reduce((total, item) => total + item.qty * item.price, 0)
-                .toFixed(2)}
+              {cartItems &&
+                cartItems
+                  .reduce((total, item) => total + item.qty * item.price, 0)
+                  .toFixed(2)}
             </ListGroup.Item>
 
             <Button

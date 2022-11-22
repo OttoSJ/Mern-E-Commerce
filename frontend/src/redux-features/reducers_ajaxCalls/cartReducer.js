@@ -13,7 +13,7 @@ const paymentMethodFromLocalStorage = localStorage.getItem('paymentMethod')
   ? JSON.parse(localStorage.getItem('paymentMethod'))
   : null
 
-const initialState = {
+let initialState = {
   cartItems: cartItemsFromLocalStorage,
   shippingAddress: shippingInfoFromLocalStorage,
   paymentMethod: paymentMethodFromLocalStorage,

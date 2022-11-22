@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Form, Col, Row } from 'react-bootstrap'
+import { Button, Form, Col } from 'react-bootstrap'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -19,14 +19,17 @@ const PaymentScreen = () => {
     { value: 'Stripe' },
     { value: 'Credit Card' },
   ]
-
+  const { user } = useSelector((state) => state.auth)
   const shippingAddress = useSelector((state) => state.shipping)
 
   useEffect(() => {
     if (!shippingAddress) {
       navigate('/shipping')
     }
-  })
+    if (!user) {
+      navigate('/')
+    }
+  }, [shippingAddress, navigate, user])
 
   const onSubmit = (e) => {
     e.preventDefault()

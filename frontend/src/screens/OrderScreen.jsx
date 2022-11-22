@@ -3,7 +3,7 @@ import axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import Loader from '../components/Loader.jsx'
 import Message from '../components/Message'
 import { getOrderDetails } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
@@ -11,14 +11,17 @@ import {
   orderPayment,
   reset,
 } from '../redux-features/reducers_ajaxCalls/orderPaymentReducer.js'
+import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer'
 
 const OrderScreen = () => {
   const dispatch = useDispatch()
   const params = useParams()
+  const navigate = useNavigate()
   const [sdkReady, setSdkReady] = useState(false)
   const { order, isError, isLoading } = useSelector((state) => state.order)
+  const { user } = useSelector((state) => state.auth)
   const {
-    orderPayment: orderPayStatus,
+    // orderPayment: orderPayStatus,
     isLoading: loadingPay,
     isSuccess: successPay,
   } = useSelector((state) => state.orderPayment)
@@ -27,10 +30,17 @@ const OrderScreen = () => {
     (acc, item) => acc + item.price * item.qty,
     0
   )
-  //   console.log(orderPayStatus, loadingPay, successPay)
-  //   console.log(order.isPaid)
-  //   console.log(order._id)
+  console.log('Is Success', successPay)
+
   useEffect(() => {
+    if (!user) {
+      dispatch(resetCart())
+      navigate('/')
+    }
+    // else if (successPay) {
+    //   localStorage.removeItem('order')
+    //   localStorage.removeItem('cartItems')
+    // }
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal')
       const script = document.createElement('script')
@@ -53,7 +63,7 @@ const OrderScreen = () => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, params.orderId, order, successPay, sdkReady])
+  }, [dispatch, params.orderId, order, successPay, sdkReady, navigate, user])
 
   const successPaymentHander = (paymentResult) => {
     dispatch(orderPayment(paymentResult))

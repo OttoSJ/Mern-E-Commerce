@@ -38,12 +38,13 @@ const PlaceOrderScreen = () => {
 
     dispatch(addOrder(orderDetails))
   }
+  const isOrder = localStorage.getItem('order')
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && isOrder) {
       navigate(`/orders/${order._id}`)
     }
-  }, [isSuccess, navigate, order._id])
+  }, [isSuccess, navigate, order._id, isOrder])
 
   return (
     <>

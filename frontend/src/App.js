@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Header from './components/Header'
@@ -14,9 +16,20 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
 
 const App = () => {
+  const [hasCartItems, setHasCartItems] = useState(false)
+  const { cartItems } = useSelector((state) => state.cart)
+  console.log(cartItems)
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setHasCartItems(true)
+    } else {
+      setHasCartItems(false)
+    }
+  }, [cartItems])
+
   return (
     <BrowserRouter>
-      <Header />
+      <Header hasCartItems={hasCartItems} />
       <main className="py-3">
         <Container>
           <Routes>
