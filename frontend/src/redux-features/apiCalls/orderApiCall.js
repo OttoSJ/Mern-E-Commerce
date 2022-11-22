@@ -41,9 +41,26 @@ const getOrder = async (orderId) => {
   return data
 }
 
+const getAllOrders = async () => {
+  const userToken = JSON.parse(localStorage.getItem('user')).token
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  }
+
+  const {
+    data: { data },
+  } = await axios.get(`/api/orders/myorders`, config)
+
+  return data
+}
+
 const orderAPI = {
   createOrder,
   getOrder,
+  getAllOrders,
 }
 
 export default orderAPI

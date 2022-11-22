@@ -7,6 +7,7 @@ const orderFromLocalStorage = localStorage.getItem('order')
 
 const initialState = {
   order: orderFromLocalStorage,
+  myOrders: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -35,6 +36,23 @@ export const getOrderDetails = createAsyncThunk(
   async (orderInfo, thunkAPI) => {
     try {
       return await orderAPI.getOrder(orderInfo)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const getAllMyOrders = createAsyncThunk(
+  'getAllMyOrders',
+  async (_, thunkAPI) => {
+    try {
+      return await orderAPI.getAllOrders()
     } catch (error) {
       const message =
         (error.response &&
@@ -82,6 +100,21 @@ export const orderReducer = createSlice({
         localStorage.setItem('order', JSON.stringify(action.payload))
       })
       .addCase(getOrderDetails.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getAllMyOrders.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getAllMyOrders.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.myOrders = action.payload
+
+        localStorage.setItem('myOrders', JSON.stringify(action.payload))
+      })
+      .addCase(getAllMyOrders.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

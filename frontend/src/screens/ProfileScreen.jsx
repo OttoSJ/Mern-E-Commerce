@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Button, Form } from 'react-bootstrap'
+import { Row, Col, Button, Form, Table } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { updateUser } from '../redux-features/reducers_ajaxCalls/authReducer.js'
+import { getAllMyOrders } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
 
 const ProfileScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
+  // const [orders, setOrders] = useState([])
 
   const [userMessage, setUserMessage] = useState(null)
   const { isLoading, isError, user, message } = useSelector(
     (state) => state.auth
   )
+  const {
+    myOrders,
+    isLoading: loadingOrders,
+    isError: errorOrders,
+  } = useSelector((state) => state.order)
 
   const [updateUserInfo, setUpdateUserInfo] = useState({
     name: user?.name,
@@ -25,11 +33,14 @@ const ProfileScreen = () => {
   })
   const { name, email, password, confirmPassword } = updateUserInfo
 
+  console.log(myOrders[0].isDelivered)
   useEffect(() => {
     if (!user) {
       navigate('/login')
     }
-  }, [navigate, user])
+
+    dispatch(getAllMyOrders())
+  }, [navigate, user, dispatch])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -55,7 +66,7 @@ const ProfileScreen = () => {
 
   return (
     <Row>
-      <Col md={4}>
+      <Col md={3}>
         <h2>User Profile</h2>
         {userMessage && <Message variant="danger">{userMessage}</Message>}
         {isError && <Message variant="danger">{message}</Message>}
@@ -102,14 +113,73 @@ const ProfileScreen = () => {
               onChange={(e) => onChange(e)}
             ></Form.Control>
           </Form.Group>
-          <Button type="submit" variant="primary" className="my-3 rounded">
+          <Button
+            type="submit"
+            variant="primary"
+            className="my-3 rounded col-12"
+          >
             Submit
           </Button>
         </Form>
       </Col>
-      <Col md={7} className="mx-4">
+      <Col md={9}>
         {' '}
         <h2>My Orders</h2>
+        {loadingOrders ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant={'danger'}>{errorOrders}</Message>
+        ) : (
+          <Table
+            striped
+            bordered
+            hover
+            responsive
+            className="table-sm"
+            style={{ border: 'grey' }}
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>Paid</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {myOrders.map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>{order.createdAt.split('T')[0]}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>
+                    {order.isPaid ? (
+                      order.paidAt.split('T')[0]
+                    ) : (
+                      <i className="fas fa-times" style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.split('T')[0]
+                    ) : (
+                      <i className="fas fa-times" style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/order/${order._id}`}>
+                      <Button className="btn-sm" variant="light">
+                        Details
+                      </Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   )

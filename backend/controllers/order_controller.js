@@ -10,6 +10,20 @@ const getAllOrders = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: orders })
 })
 
+// @desc Get all logged in users orders
+// @route GET /api/orders/myorders
+// @access Private
+const getAllMyOrders = asyncHandler(async (req, res) => {
+  const userId = req.user._id.toString()
+
+  const orders = await Orders.find({ user: userId })
+  if (!orders.length === 0) {
+    res.status(404)
+    throw new Error('You have no orders')
+  }
+  res.status(200).json({ success: true, data: orders })
+})
+
 // @desc Get single order by id
 // @route GET /api/orders/:orderId
 // @access Private
@@ -61,13 +75,28 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc Update an order
-// @route PUT /api/orders/:orderId
+// @desc Update an order to paid
+// @route PUT /api/orders/:orderId/pay
 // @access Private
 const updateOrder = asyncHandler(async (req, res) => {
-  //   const orders = await Orders.updateOne(req.params, req.body)
+  const order = await Orders.findById(req.params.orderId)
 
-  res.status(200).json({ success: true, data: 'Updated an order' })
+  if (order) {
+    order.isPaid = true
+    order.paidAt = Date.now()
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.status.update_time,
+      email_address: req.body.payer.email_address,
+    }
+
+    const updateOrder = await order.save()
+    res.status(200).json({ success: true, data: updateOrder })
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
 })
 
 // @desc Delete an order
@@ -79,4 +108,11 @@ const deleteOrder = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: 'Deleted an order' })
 })
 
-export { getAllOrders, getSingleOrder, createOrder, updateOrder, deleteOrder }
+export {
+  getAllOrders,
+  getSingleOrder,
+  createOrder,
+  updateOrder,
+  deleteOrder,
+  getAllMyOrders,
+}
