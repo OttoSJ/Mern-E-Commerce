@@ -3,9 +3,9 @@ import asyncHandler from 'express-async-handler'
 
 // @desc Get all users
 // @route GET /api/users
-// @access Private
+// @access Private/Admin
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await Users.find()
+  const users = await Users.find({})
   res.status(200).json({ success: true, data: users })
 })
 
@@ -15,6 +15,19 @@ const getAllUsers = asyncHandler(async (req, res) => {
 const getUserById = asyncHandler(async (req, res) => {
   const user = req.user
   res.status(200).json({ success: true, data: user })
+})
+
+// @desc Get user by id
+// @route GET /api/users/getuser/:userId
+// @access Private
+const getUserByIdAdmin = asyncHandler(async (req, res) => {
+  const user = await Users.findById(req.params.userId)
+
+  if (user) {
+    res.status(200).json({ success: true, data: user })
+  } else {
+    throw (new Error('User not found'), res.status(404))
+  }
 })
 
 // @desc Create user
@@ -60,8 +73,8 @@ const userLogin = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc Login user
-// @route POST /api/users
+// @desc Update user
+// @route PUT /api/users
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
@@ -83,4 +96,46 @@ const updateUser = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: user })
 })
 
-export { getAllUsers, getUserById, userLogin, createUser, updateUser }
+// @desc Update user
+// @route PUT /api/users/:userId
+// @access Private/Admin
+const adminUserUpdate = asyncHandler(async (req, res) => {
+  console.log(req.params.userId)
+  const user = await Users.findOneAndUpdate(req.params.userId, req.body, {
+    new: true,
+  })
+
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  } else {
+    await user.save()
+
+    res.status(200).json({ success: true, data: user })
+  }
+})
+
+// @desc Delete user
+// @route DELETE /api/users/:userId
+// @access Private/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await Users.findById({ _id: req.params.userId })
+
+  if (user) {
+    user.remove()
+    res.status(200).json({ success: true, data: user, msg: 'User was deleted' })
+  } else {
+    throw (new Error('User not found'), res.status(404))
+  }
+})
+
+export {
+  getAllUsers,
+  getUserById,
+  getUserByIdAdmin,
+  userLogin,
+  createUser,
+  updateUser,
+  adminUserUpdate,
+  deleteUser,
+}

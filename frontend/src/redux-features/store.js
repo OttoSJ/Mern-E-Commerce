@@ -7,16 +7,18 @@ import shippingReducer from '../redux-features/reducers_ajaxCalls/shippingReduce
 import paymentReducer from '../redux-features/reducers_ajaxCalls/paymentMethodReducer'
 import orderReducer from '../redux-features/reducers_ajaxCalls/orderReducer'
 import orderPaymentReducer from '../redux-features/reducers_ajaxCalls/orderPaymentReducer'
+import userListReducer from '../redux-features/reducers_ajaxCalls/userReducer'
 
 export const store = configureStore({
   reducer: {
     products: productsReducer,
     productDetails: productDetailsReducer,
     cart: cartReducer,
-    auth: userReducer,
     shipping: shippingReducer,
     paymentMethod: paymentReducer,
     order: orderReducer,
     orderPayment: orderPaymentReducer,
+    auth: userReducer,
+    userList: userListReducer,
   },
 })

@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
-import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '../redux-features/reducers_ajaxCalls/authReducer'
-import { reset } from '../redux-features/reducers_ajaxCalls/authReducer'
+import { logout, reset } from '../redux-features/reducers_ajaxCalls/authReducer'
 import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer.js'
 import { reset as resetOrder } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
 
@@ -19,8 +18,6 @@ const Header = ({ hasCartItems }) => {
       dispatch(resetCart())
     }
   }, [user, navigate, cartItems, dispatch])
-
-  console.log(hasCartItems)
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -52,14 +49,32 @@ const Header = ({ hasCartItems }) => {
                 {' '}
                 <i className="fas fa-shopping-cart"></i> Cart
               </Nav.Link>
-              {!user ? (
+              {user && !user?.isAdmin ? (
+                <NavDropdown title={user?.name.split(' ')[0]} id="username">
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : !user && !user?.isAdmin ? (
                 <Nav.Link as={Link} to="/login">
                   <i className="fas fa-user px-1"></i>Sign In
                 </Nav.Link>
               ) : (
-                <NavDropdown title={user.name.split(' ')[0]} id="username">
-                  <NavDropdown.Item as={Link} to="/profile">
-                    Profile
+                <NavDropdown title="Admin" id="adminmenu">
+                  <NavDropdown.Item as={Link} to="/admin/userlist">
+                    Users
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/admin/productlist">
+                    Products
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/admin/orderlist">
+                    Orders
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={logoutHandler}>
