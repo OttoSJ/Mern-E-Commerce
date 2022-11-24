@@ -97,22 +97,23 @@ const updateUser = asyncHandler(async (req, res) => {
 })
 
 // @desc Update user
-// @route PUT /api/users/:userId
+// @route PUT /api/users/admin/:userId
 // @access Private/Admin
 const adminUserUpdate = asyncHandler(async (req, res) => {
   console.log(req.params.userId)
-  const user = await Users.findOneAndUpdate(req.params.userId, req.body, {
-    new: true,
-  })
+  const user = await Users.findOneAndUpdate(
+    { _id: req.params.userId },
+    req.body,
+    {
+      new: true,
+    }
+  )
 
   if (!user) {
     res.status(404)
     throw new Error('User not found')
-  } else {
-    await user.save()
-
-    res.status(200).json({ success: true, data: user })
   }
+  res.status(200).json({ success: true, data: user })
 })
 
 // @desc Delete user

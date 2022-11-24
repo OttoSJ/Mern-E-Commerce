@@ -34,6 +34,7 @@ const getUserById = async (userId) => {
 const updateUser = async (userInfo) => {
   const token = JSON.parse(localStorage.getItem('user'))?.token
   const { userInfo: userData, userId } = userInfo
+  console.log(userId)
 
   const config = {
     headers: {
@@ -44,7 +45,7 @@ const updateUser = async (userInfo) => {
 
   const {
     data: { data },
-  } = await axios.put(`${base_URL}${userId}`, userData, config)
+  } = await axios.put(`${base_URL}admin/${userId}`, userData, config)
 
   data['isSuccess'] = true
 

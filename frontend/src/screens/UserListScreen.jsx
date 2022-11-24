@@ -8,6 +8,7 @@ import Loader from '../components/Loader'
 import {
   getAllUsers,
   deleteUser,
+  reset,
 } from '../redux-features/reducers_ajaxCalls/userReducer.js'
 
 const UserListScreen = () => {
@@ -33,6 +34,9 @@ const UserListScreen = () => {
     if (window.confirm('Are you sure')) {
       dispatch(deleteUser(userId))
     }
+  }
+  const handleReset = () => {
+    dispatch(reset())
   }
 
   return (
@@ -73,7 +77,10 @@ const UserListScreen = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/user/${user._id}/edit`}>
+                    <LinkContainer
+                      onClick={handleReset}
+                      to={`/user/${user._id}/edit`}
+                    >
                       <Button variant="light" className="btn-sm">
                         <i className="fas fa-edit"></i> Edit
                       </Button>

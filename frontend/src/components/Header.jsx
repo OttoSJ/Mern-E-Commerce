@@ -25,8 +25,6 @@ const Header = ({ hasCartItems }) => {
     localStorage.removeItem('cartItems')
     dispatch(resetCart())
     dispatch(resetOrder())
-
-    navigate('/')
   }
 
   return (

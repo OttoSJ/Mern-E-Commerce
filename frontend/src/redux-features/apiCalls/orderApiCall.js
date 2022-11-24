@@ -25,12 +25,12 @@ const createOrder = async (orderInfo) => {
 }
 
 const getOrder = async (orderId) => {
-  const userToken = JSON.parse(localStorage.getItem('user')).token
+  const token = JSON.parse(localStorage.getItem('user')).token
 
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${userToken}`,
+      Authorization: `Bearer ${token}`,
     },
   }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Form, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
@@ -20,24 +20,23 @@ const EditUsersScreen = () => {
   const { user, isError, message, isLoading } = useSelector(
     (state) => state.userList
   )
-  const [updateUserInfo, setUpdateUserInfo] = useState({
-    name: user?.name,
-    email: user?.email,
-    isAdmin: user?.isAdmin,
+  let [updateUserInfo, setUpdateUserInfo] = useState({
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
   })
 
-  console.log(userId)
+  let adminStatus = user.isAdmin
+
+  adminStatus = adminStatus ? 'isAdminTrue' : 'isAdminFalse'
+  const [selectedButton, setSelectedButton] = useState(adminStatus)
+
   useEffect(() => {
     if (!adminUser) {
       navigate('/login')
     }
+    setSelectedButton(adminStatus)
     dispatch(getUserById(userId))
-  }, [dispatch, userId, adminUser.isAdmin, navigate, adminUser])
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-
-    dispatch(updateUser({ userInfo: updateUserInfo, userid: userId }))
 
     if (user.isSuccess) {
       setSuccess(true)
@@ -45,79 +44,123 @@ const EditUsersScreen = () => {
         setSuccess(false)
       }, 3000)
     }
+  }, [
+    dispatch,
+    userId,
+    adminUser?.isAdmin,
+    navigate,
+    adminUser,
+    user._id,
+    adminStatus,
+  ])
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    dispatch(updateUser({ userInfo: updateUserInfo, userId: userId }))
   }
 
   const onChange = (e) => {
     setUpdateUserInfo((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.id]: e.target.value,
     }))
+    setSelectedButton(e.currentTarget.name)
+    console.log(updateUserInfo)
+    console.log(e.currentTarget.id)
+    console.log(e.target.value)
   }
 
-  const handleDelete = (e) => {
-    console.log('clicked')
+  const handleDelete = () => {
     dispatch(deleteUser(userId))
     dispatch(reset())
     navigate('/admin/userlist')
   }
 
-  return (
-    <Row>
-      <Col md={6}>
-        <h2>User Profile</h2>
-        {/* {userMessage && <Message variant="danger">{userMessage}</Message>} */}
-        {isError && <Message variant="danger">{message}</Message>}
-        {success && (
-          <Message variant="success">Your profile has been updated!</Message>
-        )}
-        {isLoading && <Loader />}
-        <Form onSubmit={onSubmit}>
-          <Form.Group className="my-4" controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="name"
-              name="name"
-              defaultValue={user ? user.name : null}
-              placeholder={!user ? 'Enter name' : null}
-              onChange={(e) => onChange(e)}
-            ></Form.Control>
-          </Form.Group>
-          <Form.Group className="my-4" controlId="email">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              defaultValue={user ? user.email : null}
-              placeholder={!user ? 'Enter email' : null}
-              onChange={(e) => onChange(e)}
-            ></Form.Control>
-          </Form.Group>
-          <Form.Group className="my-4" controlId="isAdmin">
-            <Form.Label>Admin</Form.Label>
-            <Form.Control as="select" name="isAdmin" onChange={onChange}>
-              <option>--Select--</option>
-              <option value={true}>True</option>
-              <option value={false}>False</option>
-            </Form.Control>
-          </Form.Group>
+  const handleReset = () => {
+    dispatch(reset())
+  }
 
-          <Button
-            type="submit"
-            variant="primary"
-            className="my-3 rounded col-12"
-          >
-            Update
-          </Button>
-          <Button
-            onClick={handleDelete}
-            variant="danger"
-            className="my-3 rounded col-12"
-          >
-            Delete
-          </Button>
-        </Form>
-      </Col>
-    </Row>
+  return (
+    <>
+      <Link
+        to="/admin/userlist"
+        className="btn btn-light my-3"
+        onClick={handleReset}
+      >
+        Go Back{' '}
+      </Link>
+
+      <Row>
+        <Col md={6}>
+          <h2>Edit User Profile</h2>
+
+          {isError && <Message variant="danger">{message}</Message>}
+          {success && (
+            <Message variant="success">Your profile has been updated!</Message>
+          )}
+          {isLoading && <Loader />}
+          <Form onSubmit={onSubmit}>
+            <Form.Group className="my-4">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="name"
+                id="name"
+                defaultValue={user ? user?.name : null}
+                placeholder={!user ? 'Enter name' : null}
+                onChange={(e) => onChange(e)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group className="my-4">
+              <Form.Label>Email Address</Form.Label>
+              <Form.Control
+                type="email"
+                id="email"
+                defaultValue={user ? user?.email : null}
+                placeholder={!user ? 'Enter email' : null}
+                onChange={(e) => onChange(e)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group className="my-4in">
+              <Form.Label>Admin</Form.Label>
+
+              <Form.Check
+                label={'True'}
+                type="radio"
+                id="isAdmin"
+                name="isAdminTrue"
+                value={true}
+                checked={selectedButton === 'isAdminTrue'}
+                onChange={onChange}
+              ></Form.Check>
+              <Form.Check
+                label={'False'}
+                type="radio"
+                id="isAdmin"
+                name="isAdminFalse"
+                value={false}
+                checked={selectedButton === 'isAdminFalse'}
+                onChange={onChange}
+              ></Form.Check>
+            </Form.Group>
+            <Button
+              type="submit"
+              variant="primary"
+              className="my-3 rounded col-12"
+            >
+              Update
+            </Button>
+            <Button
+              onClick={handleDelete}
+              variant="danger"
+              className="my-3 rounded col-12"
+            >
+              Delete
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </>
   )
 }
 

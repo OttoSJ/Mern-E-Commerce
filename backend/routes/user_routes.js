@@ -26,7 +26,7 @@ router.post('/login', userLogin)
 
 router.put('/', protect, updateUser)
 
-router.put('/:userId', protect, authorize, adminUserUpdate)
+router.put('/admin/:userId', protect, authorize, adminUserUpdate)
 
 router.delete('/:userId', protect, authorize, deleteUser)
 
