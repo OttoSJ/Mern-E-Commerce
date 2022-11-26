@@ -52,6 +52,7 @@ const EditUsersScreen = () => {
     adminUser,
     user._id,
     adminStatus,
+    user.isSuccess,
   ])
 
   const onSubmit = (e) => {
@@ -66,9 +67,6 @@ const EditUsersScreen = () => {
       [e.target.id]: e.target.value,
     }))
     setSelectedButton(e.currentTarget.name)
-    console.log(updateUserInfo)
-    console.log(e.currentTarget.id)
-    console.log(e.target.value)
   }
 
   const handleDelete = () => {
@@ -121,7 +119,7 @@ const EditUsersScreen = () => {
                 onChange={(e) => onChange(e)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group className="my-4in">
+            <Form.Group className="my-4">
               <Form.Label>Admin</Form.Label>
 
               <Form.Check

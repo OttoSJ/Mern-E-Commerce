@@ -51,6 +51,7 @@ export const getUserById = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   'updateUserAdmin',
   async (userInfo, thunkAPI) => {
+    console.log(userInfo)
     try {
       return await usersAPI.updateUser(userInfo)
     } catch (error) {

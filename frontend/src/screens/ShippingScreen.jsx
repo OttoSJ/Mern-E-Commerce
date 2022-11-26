@@ -14,7 +14,6 @@ const ShippingScreen = () => {
   const user = useSelector((state) => state.auth.user)
   const { address, city, country, postalCode } = cart.shippingAddress
 
-  console.log(user)
   const [formData, setFormData] = useState({
     address,
     city,
@@ -24,13 +23,12 @@ const ShippingScreen = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/')
+      navigate('/login')
     }
   }, [user, navigate])
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log('submitted form')
     dispatch(saveShippingAddress(formData))
     navigate('/payment')
   }

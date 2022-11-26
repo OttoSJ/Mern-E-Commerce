@@ -1,7 +1,7 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import { Card, Button } from "react-bootstrap"
-import Rating from "../components/Rating"
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { Card, Button } from 'react-bootstrap'
+import Rating from '../components/Rating'
 
 const Product = ({ product }) => {
   return (
@@ -22,7 +22,9 @@ const Product = ({ product }) => {
           />
         </Card.Text>
         <Card.Text as="h3">${product.price}</Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <Button as={Link} to={`/product/${product._id}`} variant="primary">
+          Product Details
+        </Button>
       </Card.Body>
     </Card>
   )

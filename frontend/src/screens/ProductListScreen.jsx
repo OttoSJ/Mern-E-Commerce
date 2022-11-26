@@ -2,19 +2,18 @@ import React, { useEffect } from 'react'
 import { Button, Table, Row, Col } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   getProductList,
   deleteProduct,
-  reset,
 } from '../redux-features/reducers_ajaxCalls/productListReducer'
 
 const ProductListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const params = useParams()
+  // const params = useParams()
 
   const products = useSelector((state) => state.products)
   const {
@@ -22,11 +21,8 @@ const ProductListScreen = () => {
     isLoading,
     isError,
     isSuccess,
-    message,
   } = products
-  const { user, isSuccess: isSuccessUser } = useSelector((state) => state.auth)
-
-  console.log(isSuccess)
+  const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (!user?.isAdmin) {
@@ -38,8 +34,7 @@ const ProductListScreen = () => {
 
   const deleteHandler = async (productId) => {
     if (window.confirm('Are you sure')) {
-      dispatch(deleteProduct(productId))
-      dispatch(reset())
+      await dispatch(deleteProduct(productId))
 
       await dispatch(getProductList())
     }
@@ -49,16 +44,17 @@ const ProductListScreen = () => {
   }
 
   const createProductHandler = () => {
-    console.log('clicked')
+    navigate('/admin/products/create')
+    //
   }
 
   return (
     <>
-      <Row className="align-items-center">
+      <Row className="align-items-center ">
         <Col>
           <h1>Products</h1>
         </Col>
-        <Col className="text-right">
+        <Col className="d-flex justify-content-end">
           <Button className="my-3" onClick={createProductHandler}>
             <i className="fas fa-plus"></i> Create Product
           </Button>
@@ -68,49 +64,52 @@ const ProductListScreen = () => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <Message variant="danger">{isError}</Message>
+        <Message variant="danger">
+          Error has occurred retrieving the products
+        </Message>
       ) : (
-        <Table striped bordered responsive className="table-sm">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>PRODUCT NAME</th>
-              <th>PRICE</th>
-              <th>CATEGORY</th>
-              <th>BRAND</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {allProducts?.map((product) => (
-              <tr key={product._id}>
-                <td>{product?._id}</td>
-                <td>{product?.name}</td>
-                <td>${product?.price}</td>
-                <td>{product?.category}</td>
-                <td>{product?.brand}</td>
-
-                <td>
-                  <LinkContainer
-                    onClick={handleReset}
-                    to={`/admin/product/${product._id}/edit`}
-                  >
-                    <Button variant="light" className="btn-sm m-1">
-                      <i className="fas fa-edit"></i>
-                    </Button>
-                  </LinkContainer>
-                  <Button
-                    variant="danger"
-                    className="btn-sm m-1"
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </Button>
-                </td>
+        <>
+          <Table striped bordered responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>PRODUCT NAME</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {allProducts?.map((product) => (
+                <tr key={product._id}>
+                  <td>{product?._id}</td>
+                  <td>{product?.name}</td>
+                  <td>${product?.price}</td>
+                  <td>{product?.category}</td>
+                  <td>{product?.brand}</td>
+                  <td>
+                    <LinkContainer
+                      onClick={handleReset}
+                      to={`/admin/product/${product._id}/edit`}
+                    >
+                      <Button variant="light" className="btn-sm m-1">
+                        <i className="fas fa-edit"></i>
+                      </Button>
+                    </LinkContainer>
+                    <Button
+                      variant="danger"
+                      className="btn-sm m-1"
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <i className="fas fa-trash"></i>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </>
       )}
     </>
   )

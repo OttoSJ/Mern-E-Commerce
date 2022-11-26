@@ -7,7 +7,6 @@ import Loader from '../components/Loader'
 import { login } from '../redux-features/reducers_ajaxCalls/authReducer.js'
 import FormContainer from '../components/FormContainer.jsx'
 import { reset } from '../redux-features/reducers_ajaxCalls/authReducer.js'
-// import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer.js'
 
 const LoginScreen = () => {
   const dispatch = useDispatch()
@@ -26,8 +25,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (user) {
-      // navigate(`/`)
-      navigate(`/${redirect}`)
+      navigate(`${redirect}`)
     } else {
       dispatch(reset())
     }

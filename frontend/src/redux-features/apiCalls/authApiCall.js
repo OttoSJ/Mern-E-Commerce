@@ -33,6 +33,7 @@ const logoutUser = async () => {
   localStorage.removeItem('paymentMethod')
   localStorage.removeItem('myOrders')
   localStorage.removeItem('cartItems')
+  localStorage.removeItem('products')
   localStorage.removeItem('__paypal_storage__')
 }
 

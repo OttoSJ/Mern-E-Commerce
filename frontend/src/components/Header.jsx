@@ -40,9 +40,7 @@ const Header = ({ hasCartItems }) => {
             className="justify-content-end"
           >
             <Nav className="ml-auto">
-              <span className="cart-items">
-                {!hasCartItems ? 0 : cartItems.length}
-              </span>
+              <span className="cart-items">{!user ? 0 : cartItems.length}</span>
               <Nav.Link as={Link} to="/cart">
                 {' '}
                 <i className="fas fa-shopping-cart"></i> Cart

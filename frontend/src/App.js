@@ -16,8 +16,10 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
 import UserListScreen from './screens/UserListScreen'
 import EditUsersScreen from './screens/EditUsersScreen'
-import OrderListScreen from './screens/OrderListScreen'
 import ProductListScreen from './screens/ProductListScreen'
+import EditProductScreen from './screens/EditProductScreen'
+import CreateProductScreen from './screens/CreateProductScreen'
+import OrderListScreen from './screens/OrderListScreen'
 
 const App = () => {
   const [hasCartItems, setHasCartItems] = useState(false)
@@ -50,10 +52,21 @@ const App = () => {
             <Route path="/payment" element={<PaymentScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route path="/orders/:orderId" element={<OrderScreen />} />
-            <Route path="/user/:userId/edit" element={<EditUsersScreen />} />
+            <Route
+              path="/admin/user/:userId/edit"
+              element={<EditUsersScreen />}
+            />
+            <Route
+              path="/admin/product/:productId/edit"
+              element={<EditProductScreen />}
+            />
             <Route path="/admin/userlist" element={<UserListScreen />} />
             <Route path="/admin/productlist" element={<ProductListScreen />} />
             <Route path="/admin/orderlist" element={<OrderListScreen />} />
+            <Route
+              path="/admin/products/create"
+              element={<CreateProductScreen />}
+            />
           </Routes>
         </Container>
       </main>

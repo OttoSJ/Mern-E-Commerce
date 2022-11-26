@@ -100,7 +100,6 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route PUT /api/users/admin/:userId
 // @access Private/Admin
 const adminUserUpdate = asyncHandler(async (req, res) => {
-  console.log(req.params.userId)
   const user = await Users.findOneAndUpdate(
     { _id: req.params.userId },
     req.body,

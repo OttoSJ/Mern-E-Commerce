@@ -20,27 +20,20 @@ const OrderScreen = () => {
   const [sdkReady, setSdkReady] = useState(false)
   const { order, isError, isLoading } = useSelector((state) => state.order)
   const { user } = useSelector((state) => state.auth)
-  const {
-    // orderPayment: orderPayStatus,
-    isLoading: loadingPay,
-    isSuccess: successPay,
-  } = useSelector((state) => state.orderPayment)
+  const { isLoading: loadingPay, isSuccess: successPay } = useSelector(
+    (state) => state.orderPayment
+  )
 
   let itemsTotal = order.orderItems?.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   )
-  console.log('Is Success', successPay)
 
   useEffect(() => {
     if (!user) {
       dispatch(resetCart())
       navigate('/')
     }
-    // else if (successPay) {
-    //   localStorage.removeItem('order')
-    //   localStorage.removeItem('cartItems')
-    // }
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal')
       const script = document.createElement('script')
@@ -83,9 +76,9 @@ const OrderScreen = () => {
               <h5>Shipping</h5>
               <p>
                 <strong>Address: </strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city},{' '}
-                {order.shippingAddress.country},{' '}
-                {order.shippingAddress.postalCode}
+                {order.shippingAddress?.address}, {order.shippingAddress?.city},{' '}
+                {order.shippingAddress?.country},{' '}
+                {order.shippingAddress?.postalCode}
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
@@ -98,9 +91,9 @@ const OrderScreen = () => {
               )}
               <h5>Customer</h5>
               <p>
-                <strong>Name: </strong> {order.user.name} <br />
+                <strong>Name: </strong> {order.user?.name} <br />
                 <strong>Email: </strong>
-                <a href={`mailto:${order.user.email}`}> {order.user.email}</a>
+                <a href={`mailto:${order.user?.email}`}> {order.user?.email}</a>
               </p>
             </ListGroup.Item>
 
@@ -108,22 +101,22 @@ const OrderScreen = () => {
               <h5>Payment Method</h5>
               <p>
                 <strong>Method: </strong>
-                {order.paymentMethod}
+                {order?.paymentMethod}
               </p>
-              {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
+              {order?.isPaid ? (
+                <Message variant="success">Paid on {order?.paidAt}</Message>
               ) : (
-                <Message variant="danger">Not Paid {order.paidAt}</Message>
+                <Message variant="danger">Not Paid {order?.paidAt}</Message>
               )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h5>Order Items</h5>
-              {order.orderItems.length === 0 ? (
+              {order.orderItems?.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
                 <ListGroup variant="flush">
-                  {order.orderItems.map((item, index) => (
+                  {order.orderItems?.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={2}>
@@ -141,7 +134,7 @@ const OrderScreen = () => {
                         </Col>
                         <Col md={5}>
                           {item.qty} x {item.price} = $
-                          {(item.qty * item.price).toFixed(2)}
+                          {(item.qty * item.price)?.toFixed(2)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -170,12 +163,12 @@ const OrderScreen = () => {
 
               <ListGroup.Item className="d-flex p-3">
                 <Col>Tax</Col>
-                <Col>${order.taxPrice.toFixed(2)}</Col>
+                <Col>${order.taxPrice?.toFixed(2)}</Col>
               </ListGroup.Item>
 
               <ListGroup.Item className="d-flex p-3">
                 <Col>Total</Col>
-                <Col>${order.totalPrice.toFixed(2)}</Col>
+                <Col>${order.totalPrice?.toFixed(2)}</Col>
               </ListGroup.Item>
             </ListGroup>
             <ListGroup.Item>
