@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import connnectDB from './config/db.js'
 import colors from 'colors'
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 5000
 import products from './routes/products_routes.js'
 import users from './routes/user_routes.js'
 import orders from './routes/order_routes.js'
+import uploadRoutes from './routes/upload_routes.js'
 
 const app = express()
 
@@ -25,14 +27,17 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Routes
-
 app.use('/api/products', products)
 app.use('/api/users', users)
 app.use('/api/orders', orders)
+app.use('/api/upload', uploadRoutes)
 
 app.get('/api/config/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID)
 })
+
+const __dirname = path.resolve() // The __dirname onle works with commonjs not import syntax so here I'm creating a variable for __dirname with the path module.
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 app.get('/', (req, res) => {
   res.send('Api is running')

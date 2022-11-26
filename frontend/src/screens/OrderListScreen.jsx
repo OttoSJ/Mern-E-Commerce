@@ -10,22 +10,13 @@ import { getAllOrders } from '../redux-features/reducers_ajaxCalls/orderReducer'
 const OrderListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // const params = useParams()
-
-  //   const products = useSelector((state) => state.products)
-  //   const {
-  //     products: { data: allProducts },
-  //     isLoading,
-  //     isError,
-  //     isSuccess,
-  //   } = products
 
   const { allOrders, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.order
   )
   const { user } = useSelector((state) => state.auth)
 
-  console.log(allOrders[0]?.paymentResult.email_address)
+  console.log(allOrders)
 
   useEffect(() => {
     if (!user?.isAdmin) {
@@ -39,12 +30,7 @@ const OrderListScreen = () => {
     <>
       <Row className="align-items-center ">
         <Col>
-          <h1>Products</h1>
-        </Col>
-        <Col className="d-flex justify-content-end">
-          <Button className="my-3">
-            <i className="fas fa-plus"></i> Create Product
-          </Button>
+          <h1>Orders</h1>
         </Col>
       </Row>
 
@@ -52,7 +38,7 @@ const OrderListScreen = () => {
         <Loader />
       ) : isError ? (
         <Message variant="danger">
-          Error has occurred retrieving the products
+          Error has occurred retrieving the products: {message}
         </Message>
       ) : (
         <>

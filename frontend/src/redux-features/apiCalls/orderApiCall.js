@@ -70,8 +70,6 @@ const getAllOrders = async () => {
     data: { data },
   } = await axios.get(`/api/orders`, config)
 
-  console.log(data)
-
   return data
 }
 

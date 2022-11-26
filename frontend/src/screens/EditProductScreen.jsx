@@ -55,20 +55,14 @@ const EditProductScreen = () => {
     updateProductInfo,
   ])
 
-  const handleReset = () => {
-    console.log('clicked')
-  }
-
   const handleDelete = () => {
     dispatch(deleteProduct(productId))
     dispatch(reset())
     navigate('/admin/productlist')
-    console.log(productId)
   }
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log('clicked')
     dispatch(updateProduct({ updateProductInfo, productId }))
   }
 
@@ -82,11 +76,7 @@ const EditProductScreen = () => {
 
   return (
     <>
-      <Link
-        to="/admin/productlist"
-        className="btn btn-light my-3"
-        onClick={handleReset}
-      >
+      <Link to="/admin/productlist" className="btn btn-light my-3">
         Go Back
       </Link>
       <Row>

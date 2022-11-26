@@ -13,11 +13,12 @@ const Header = ({ hasCartItems }) => {
   const navigate = useNavigate()
   let { cartItems } = cart
 
+  console.log(user?.isAdmin)
   useEffect(() => {
     if (!user) {
       dispatch(resetCart())
     }
-  }, [user, navigate, cartItems, dispatch])
+  }, [user, navigate, cartItems, dispatch, user?.isAdmin])
 
   const logoutHandler = () => {
     dispatch(logout())
