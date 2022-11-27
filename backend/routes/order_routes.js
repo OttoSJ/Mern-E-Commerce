@@ -9,14 +9,14 @@ import {
   //   getAllTheseOrders,
 } from '../controllers/order_controller.js'
 
-import { protect } from '../middleware/auth_middleware.js'
+import { protect, authorize } from '../middleware/auth_middleware.js'
 const router = express.Router()
 
-router.get('/', protect, getAllOrders)
+router.get('/', protect, authorize, getAllOrders)
 router.get('/myorders', protect, getAllMyOrders)
-router.get('/:orderId', protect, getSingleOrder)
-router.post('/', protect, createOrder)
-router.put('/:orderId/pay', protect, updateOrder)
-router.delete('/:orderId', protect, deleteOrder)
+router.get('/:orderId', protect, authorize, getSingleOrder)
+router.post('/', protect, authorize, createOrder)
+router.put('/:orderId/pay', protect, authorize, updateOrder)
+router.delete('/:orderId', protect, authorize, deleteOrder)
 
 export default router

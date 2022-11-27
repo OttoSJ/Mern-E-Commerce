@@ -34,9 +34,9 @@ export const addOrder = createAsyncThunk(
 
 export const getOrderDetails = createAsyncThunk(
   'getOrderDetails',
-  async (orderInfo, thunkAPI) => {
+  async (orderId, thunkAPI) => {
     try {
-      return await orderAPI.getOrder(orderInfo)
+      return await orderAPI.getOrder(orderId)
     } catch (error) {
       const message =
         (error.response &&

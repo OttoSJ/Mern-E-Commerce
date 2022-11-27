@@ -20,6 +20,7 @@ import ProductListScreen from './screens/ProductListScreen'
 import EditProductScreen from './screens/EditProductScreen'
 import CreateProductScreen from './screens/CreateProductScreen'
 import OrderListScreen from './screens/OrderListScreen'
+import OrderDetailsScreen from './screens/OrderDetailsScreen'
 
 const App = () => {
   const [hasCartItems, setHasCartItems] = useState(false)
@@ -59,6 +60,10 @@ const App = () => {
             <Route
               path="/admin/product/:productId/edit"
               element={<EditProductScreen />}
+            />
+            <Route
+              path="/admin/orderdetails/:orderId"
+              element={<OrderDetailsScreen />}
             />
             <Route path="/admin/userlist" element={<UserListScreen />} />
             <Route path="/admin/productlist" element={<ProductListScreen />} />

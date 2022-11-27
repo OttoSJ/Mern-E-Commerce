@@ -63,6 +63,7 @@ export const createProduct = createAsyncThunk(
 export const updateProduct = createAsyncThunk(
   'updateProduct',
   async (productInfo, thunkAPI) => {
+    console.log(productInfo)
     try {
       return await productsAPI.updateProduct(productInfo)
     } catch (error) {

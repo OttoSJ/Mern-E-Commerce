@@ -5,7 +5,7 @@ import asyncHandler from 'express-async-handler'
 // @route GET /api/orders
 // @access Private
 const getAllOrders = asyncHandler(async (req, res) => {
-  const orders = await Orders.find({})
+  const orders = await Orders.find({}).populate('user', 'id name')
 
   res.status(200).json({ success: true, data: orders })
 })

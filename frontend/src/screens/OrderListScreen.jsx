@@ -84,19 +84,12 @@ const OrderListScreen = () => {
                   <td>
                     <LinkContainer
                       //   onClick={handleReset}
-                      to={`/admin/product/${order._id}/edit`}
+                      to={`/admin/orderdetails/${order._id}`}
                     >
                       <Button variant="light" className="btn-sm m-1">
                         <i className="fas fa-edit"></i>
                       </Button>
                     </LinkContainer>
-                    <Button
-                      variant="danger"
-                      className="btn-sm m-1"
-                      //   onClick={() => deleteHandler(product._id)}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </Button>
                   </td>
                 </tr>
               ))}
