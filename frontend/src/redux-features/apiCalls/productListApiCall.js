@@ -2,8 +2,17 @@ import axios from 'axios'
 
 const productsBaseURL = '/api/products'
 
-const getAllProducts = async () => {
-  const response = await axios.get(productsBaseURL)
+const getAllProducts = async (keyword = '', pageNumber = '') => {
+  const response = await axios.get(
+    `${productsBaseURL}?keyword=${keyword}&pageNumber=${pageNumber}`
+  )
+
+  return response.data
+}
+
+const getTopProducts = async () => {
+  const response = await axios.get(`${productsBaseURL}/top`)
+
   return response.data
 }
 
@@ -76,6 +85,7 @@ const deleteProduct = async (productId, products) => {
 
 const productsAPI = {
   getAllProducts,
+  getTopProducts,
   getProductById,
   createProduct,
   updateProduct,

@@ -1,15 +1,48 @@
 import Product from '../models/Product.js'
-// import Review from '../models/Review.js'
 import asyncHandler from 'express-async-handler'
 
 // @desc Get all products
 // @route GET /api/products
 // @access Public
 const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({})
-  // res.status(401)
-  // throw new Error('Not Authorized')
-  res.status(200).json({ success: true, data: products })
+  const pageSize = 2
+  const page = Number(req.query.pageNumber) || 1
+
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {}
+
+  const count = await Product.count({ ...keyword })
+
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+
+  res.status(200).json({
+    success: true,
+    data: products,
+    page,
+    pages: Math.ceil(count / pageSize),
+  })
+})
+
+// @desc Get top rated products
+// @route GET /api/products/top
+// @access Public
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3)
+
+  if (products) {
+    res.status(200).json({ success: true, data: products })
+  } else {
+    res.status(404)
+    throw new Error('Products not found')
+  }
 })
 
 // @desc Get single product
@@ -110,6 +143,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 export {
   getAllProducts,
+  getTopProducts,
   getProductById,
   createProduct,
   createReview,

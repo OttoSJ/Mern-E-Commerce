@@ -2,8 +2,9 @@ import React, { useEffect } from 'react'
 import { Button, Table, Row, Col } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Message from '../components/Message'
+import Paginate from '../components/Paginate'
 import Loader from '../components/Loader'
 import {
   getProductList,
@@ -13,23 +14,26 @@ import {
 const ProductListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  let pageNumber = useParams().pageNumber || 1
   const products = useSelector((state) => state.products)
   const {
     products: { data: allProducts },
+    products: { page },
+    products: { pages },
     isLoading,
     isError,
     isSuccess,
+    message,
   } = products
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (!user?.isAdmin) {
       navigate('/login')
+    } else {
+      dispatch(getProductList({ keyword: '', pageNumber }))
     }
-
-    dispatch(getProductList())
-  }, [dispatch, navigate, user?.isAdmin, isSuccess])
+  }, [dispatch, navigate, user?.isAdmin, isSuccess, pageNumber])
 
   const deleteHandler = async (productId) => {
     if (window.confirm('Are you sure')) {
@@ -38,13 +42,9 @@ const ProductListScreen = () => {
       await dispatch(getProductList())
     }
   }
-  const handleReset = () => {
-    //
-  }
 
   const createProductHandler = () => {
     navigate('/admin/products/create')
-    //
   }
 
   return (
@@ -63,9 +63,7 @@ const ProductListScreen = () => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <Message variant="danger">
-          Error has occurred retrieving the products
-        </Message>
+        <Message variant="danger">{message}</Message>
       ) : (
         <>
           <Table striped bordered responsive className="table-sm">
@@ -88,10 +86,7 @@ const ProductListScreen = () => {
                   <td>{product?.category}</td>
                   <td>{product?.brand}</td>
                   <td>
-                    <LinkContainer
-                      onClick={handleReset}
-                      to={`/admin/product/${product._id}/edit`}
-                    >
+                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
                       <Button variant="light" className="btn-sm m-1">
                         <i className="fas fa-edit"></i>
                       </Button>
@@ -108,6 +103,7 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
+          <Paginate pages={pages} page={page} isAdmin={user?.isAdmin} />
         </>
       )}
     </>

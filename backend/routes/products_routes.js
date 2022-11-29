@@ -1,6 +1,7 @@
 import express from 'express'
 import {
   getAllProducts,
+  getTopProducts,
   getProductById,
   createProduct,
   createReview,
@@ -12,6 +13,8 @@ import { protect, authorize } from '../middleware/auth_middleware.js'
 const router = express.Router()
 
 router.get('/', getAllProducts)
+
+router.get('/top', getTopProducts)
 
 router.get('/:productId', getProductById)
 

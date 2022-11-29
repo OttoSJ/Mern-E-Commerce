@@ -33,11 +33,9 @@ const ReviewScreen = () => {
     { value: '5' },
   ]
 
-  let {
-    reviews,
-    isError: reviewError,
-    message: reviewMessage,
-  } = useSelector((state) => state.reviews)
+  let { isError: reviewError, message: reviewMessage } = useSelector(
+    (state) => state.reviews
+  )
   let { product, isLoading, isError, message } = useSelector(
     (state) => state.productDetails
   )

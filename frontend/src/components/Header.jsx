@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Route } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap'
 import { logout, reset } from '../redux-features/reducers_ajaxCalls/authReducer'
 import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer.js'
 import { reset as resetOrder } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
-
+import SeacrchBox from '../components/SearchBox.jsx'
 const Header = ({ user }) => {
   const cart = useSelector((state) => state.cart)
   const dispatch = useDispatch()
@@ -15,7 +16,6 @@ const Header = ({ user }) => {
   useEffect(() => {
     if (!user) {
       dispatch(resetCart())
-      // dispatch(reset())
     }
   }, [user, navigate, cartItems, dispatch, user?.isAdmin])
 
@@ -31,14 +31,15 @@ const Header = ({ user }) => {
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container className="col-12">
-          <Navbar.Brand as={Link} to="/">
-            ProShop
-          </Navbar.Brand>
+          <a href="/">
+            <Navbar.Brand>ProShop</Navbar.Brand>
+          </a>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-end"
+            className="justify-content-between"
           >
+            <SeacrchBox />
             <Nav className="ml-auto">
               <span className="cart-items">{!user ? 0 : cartItems.length}</span>
               <Nav.Link as={Link} to="/cart">
