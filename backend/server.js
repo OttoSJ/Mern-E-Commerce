@@ -4,6 +4,7 @@ import connnectDB from './config/db.js'
 import colors from 'colors'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import morgan from 'morgan'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 // Config env file
@@ -24,6 +25,9 @@ const app = express()
 connnectDB()
 
 // Middelware
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
 app.use(cors())
 app.use(express.json({ limit: '175mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -38,7 +42,7 @@ app.get('/api/config/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID)
 })
 
-const __dirname = path.resolve() // The __dirname onle works with commonjs not import syntax so here I'm creating a variable for __dirname with the path module.
+const __dirname = path.resolve() // The __dirname onle works with commonjs not import syntax. So here I'm creating a variable for __dirname with the path module.
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 app.get('/', (req, res) => {

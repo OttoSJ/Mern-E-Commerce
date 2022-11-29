@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import paymentAPI from '../apiCalls/paymentApiCall'
+import paymentAPI from '../apiCalls/paymentMethodApiCall'
 
 const paymentMethodFromLocalStorage = localStorage.getItem('paymentMethod')
   ? JSON.parse(localStorage.getItem('paymentMethod'))

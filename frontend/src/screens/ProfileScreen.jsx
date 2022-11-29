@@ -12,7 +12,6 @@ const ProfileScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
-  // const [orders, setOrders] = useState([])
 
   const [userMessage, setUserMessage] = useState(null)
   const { isLoading, isError, user, message } = useSelector(
@@ -168,7 +167,7 @@ const ProfileScreen = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`admin/order/${order._id}`}>
+                    <LinkContainer to={`/orderdetails/${order._id}`}>
                       <Button className="btn-sm" variant="light">
                         Details
                       </Button>

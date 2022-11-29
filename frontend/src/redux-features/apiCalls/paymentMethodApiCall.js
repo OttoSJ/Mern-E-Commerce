@@ -1,4 +1,4 @@
-import { updatePaymentMethod } from '../../redux-features/reducers_ajaxCalls/cartReducer'
+import { updatePaymentMethod } from '../reducers_ajaxCalls/cartReducer'
 
 const paymentMethod = async (paymentMethod, thunkAPI) => {
   thunkAPI.dispatch(updatePaymentMethod(paymentMethod))

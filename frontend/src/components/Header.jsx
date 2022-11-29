@@ -6,24 +6,23 @@ import { logout, reset } from '../redux-features/reducers_ajaxCalls/authReducer'
 import { reset as resetCart } from '../redux-features/reducers_ajaxCalls/cartReducer.js'
 import { reset as resetOrder } from '../redux-features/reducers_ajaxCalls/orderReducer.js'
 
-const Header = ({ hasCartItems }) => {
+const Header = ({ user }) => {
   const cart = useSelector((state) => state.cart)
-  const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   let { cartItems } = cart
 
-  console.log(user?.isAdmin)
   useEffect(() => {
     if (!user) {
       dispatch(resetCart())
+      // dispatch(reset())
     }
   }, [user, navigate, cartItems, dispatch, user?.isAdmin])
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
+    navigate('/')
     dispatch(logout())
     dispatch(reset())
-    localStorage.removeItem('cartItems')
     dispatch(resetCart())
     dispatch(resetOrder())
   }
@@ -31,7 +30,7 @@ const Header = ({ hasCartItems }) => {
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container>
+        <Container className="col-12">
           <Navbar.Brand as={Link} to="/">
             ProShop
           </Navbar.Brand>

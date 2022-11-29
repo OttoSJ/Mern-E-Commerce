@@ -14,8 +14,6 @@ const updateOrder = async (orderId, paymentResults) => {
     data: { data },
   } = await axios.put(`/api/orders/${orderId}/pay`, paymentResults, config)
 
-  console.log(data)
-
   return data
 }
 

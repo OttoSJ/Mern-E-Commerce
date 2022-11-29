@@ -1,4 +1,5 @@
 import Product from '../models/Product.js'
+// import Review from '../models/Review.js'
 import asyncHandler from 'express-async-handler'
 
 // @desc Get all products
@@ -40,6 +41,45 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: product })
 })
 
+// @desc Create new review
+// @route POST /api/products/:productId/reviews
+// @access Private
+const createReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+  const product = await Product.findById(req.params.productId)
+
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    )
+    if (alreadyReviewed) {
+      res.status(400)
+      throw new Error('Product already reviewed')
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+
+    product.reviews.push(review)
+    product.numReviews = product.reviews.length
+
+    product.rating =
+      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.reviews.length
+
+    console.log(product)
+    await product.save()
+    res.status(201).json({ success: true, message: 'Review added' })
+  } else {
+    res.status(404)
+    throw new Error('Product not found')
+  }
+})
+
 // @desc Update product
 // @route PUT /api/products/:productId
 // @access Private/Admin
@@ -71,7 +111,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 export {
   getAllProducts,
   getProductById,
-  deleteProduct,
-  updateProduct,
   createProduct,
+  createReview,
+  updateProduct,
+  deleteProduct,
 }

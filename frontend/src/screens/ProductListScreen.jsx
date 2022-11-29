@@ -13,7 +13,6 @@ import {
 const ProductListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // const params = useParams()
 
   const products = useSelector((state) => state.products)
   const {

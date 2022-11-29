@@ -3,6 +3,7 @@ import {
   getAllProducts,
   getProductById,
   createProduct,
+  createReview,
   updateProduct,
   deleteProduct,
 } from '../controllers/product_controller.js'
@@ -15,6 +16,8 @@ router.get('/', getAllProducts)
 router.get('/:productId', getProductById)
 
 router.post('/', protect, authorize, createProduct)
+
+router.post('/:productId/reviews', protect, createReview)
 
 router.put('/:productId', protect, authorize, updateProduct)
 

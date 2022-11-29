@@ -16,8 +16,6 @@ const OrderListScreen = () => {
   )
   const { user } = useSelector((state) => state.auth)
 
-  console.log(allOrders)
-
   useEffect(() => {
     if (!user?.isAdmin) {
       navigate('/login')
@@ -47,9 +45,17 @@ const OrderListScreen = () => {
               <tr>
                 <th>ID</th>
                 <th>PAID</th>
-                <th>ORDER TOTAL</th>
+                <th>
+                  <nobr>PAID ON</nobr>
+                </th>
+                <th>TOTAL</th>
                 <th>DELIVERED</th>
-                <th>ORDERED ON</th>
+                <th>
+                  <nobr>DELIVERY DATE</nobr>
+                </th>
+                <th>
+                  <nobr>ORDERED ON</nobr>
+                </th>
                 <th>EMAIL</th>
                 <th></th>
               </tr>
@@ -57,7 +63,11 @@ const OrderListScreen = () => {
             <tbody>
               {allOrders?.map((order) => (
                 <tr key={order._id}>
-                  <td>{order?._id}</td>
+                  <td>
+                    {' '}
+                    <a href={`/orderdetails/${order._id}`}>{order?._id}</a>{' '}
+                  </td>
+
                   <td>
                     {order?.isPaid ? (
                       <i
@@ -67,6 +77,9 @@ const OrderListScreen = () => {
                     ) : (
                       <i className="fas fa-times" style={{ color: 'red' }}></i>
                     )}
+                  </td>
+                  <td>
+                    {order?.isPaid ? order?.paidAt.substring(0, 10) : 'Pending'}
                   </td>
                   <td>${order?.totalPrice}</td>
                   <td>
@@ -79,13 +92,19 @@ const OrderListScreen = () => {
                       <i className="fas fa-times" style={{ color: 'red' }}></i>
                     )}{' '}
                   </td>
-                  <td>{(order?.createdAt).split('T')[0]}</td>
-                  <td>{order?.paymentResult?.email_address}</td>
                   <td>
-                    <LinkContainer
-                      //   onClick={handleReset}
-                      to={`/admin/orderdetails/${order._id}`}
-                    >
+                    {order?.isDelivered
+                      ? order?.deliveredAt.substring(0, 10)
+                      : 'Pending'}
+                  </td>
+                  <td>{(order?.createdAt).split('T')[0]}</td>
+                  <td>
+                    <a href={`mailto:${order?.paymentResult?.email_address}`}>
+                      {order?.paymentResult?.email_address}
+                    </a>
+                  </td>
+                  <td>
+                    <LinkContainer to={`/orderdetails/${order._id}`}>
                       <Button variant="light" className="btn-sm m-1">
                         <i className="fas fa-edit"></i>
                       </Button>

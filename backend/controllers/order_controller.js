@@ -98,6 +98,22 @@ const updateOrder = asyncHandler(async (req, res) => {
     throw new Error('Order not found')
   }
 })
+// @desc Update an order to delivered
+// @route PUT /api/orders/:orderId/delivered
+// @access Private/Admin
+const updateDeliveryStatus = asyncHandler(async (req, res) => {
+  const order = await Orders.findById(req.params.orderId)
+
+  if (order) {
+    order.isDelivered = true
+    order.deliveredAt = Date.now()
+    const updatedOrder = await order.save({ new: true })
+    res.status(200).json({ success: true, data: updatedOrder })
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+})
 
 // @desc Delete an order
 // @route DELETE /api/orders/:orderId
@@ -113,6 +129,7 @@ export {
   getSingleOrder,
   createOrder,
   updateOrder,
+  updateDeliveryStatus,
   deleteOrder,
   getAllMyOrders,
 }

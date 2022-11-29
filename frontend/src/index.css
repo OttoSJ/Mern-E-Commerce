@@ -37,3 +37,11 @@ h2 {
 .required {
   color: red;
 }
+
+.margin {
+  margin-top: -1rem;
+}
+
+.button-margin {
+  margin-top: 5.3rem;
+}

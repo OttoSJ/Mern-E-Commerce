@@ -45,14 +45,14 @@ const LoginScreen = () => {
   }
 
   return (
-    <>
+    <FormContainer>
       <h1>Sign In</h1>
       {isLoading ? (
         <Loader />
       ) : isError ? (
         <Message variant="danger">{message}</Message>
       ) : (
-        <FormContainer>
+        <>
           <Form onSubmit={onSubmit}>
             <Form.Group controlId="email">
               <Form.Label>Email Address</Form.Label>
@@ -87,9 +87,9 @@ const LoginScreen = () => {
               </Link>
             </Col>
           </Row>
-        </FormContainer>
+        </>
       )}
-    </>
+    </FormContainer>
   )
 }
 

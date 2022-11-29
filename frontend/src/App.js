@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
@@ -21,22 +20,14 @@ import EditProductScreen from './screens/EditProductScreen'
 import CreateProductScreen from './screens/CreateProductScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import OrderDetailsScreen from './screens/OrderDetailsScreen'
+import ReviewSubScreen from './screens/ReviewScreen'
 
 const App = () => {
-  const [hasCartItems, setHasCartItems] = useState(false)
-  const { cartItems } = useSelector((state) => state.cart)
-
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      setHasCartItems(true)
-    } else {
-      setHasCartItems(false)
-    }
-  }, [cartItems])
+  const { user } = useSelector((state) => state.auth)
 
   return (
     <BrowserRouter>
-      <Header hasCartItems={hasCartItems} />
+      <Header user={user} />
       <main className="py-3">
         <Container>
           <Routes>
@@ -62,8 +53,12 @@ const App = () => {
               element={<EditProductScreen />}
             />
             <Route
-              path="/admin/orderdetails/:orderId"
+              path="/orderdetails/:orderId"
               element={<OrderDetailsScreen />}
+            />
+            <Route
+              path="/reviews/:productId/:orderId"
+              element={<ReviewSubScreen />}
             />
             <Route path="/admin/userlist" element={<UserListScreen />} />
             <Route path="/admin/productlist" element={<ProductListScreen />} />

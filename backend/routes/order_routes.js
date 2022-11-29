@@ -5,6 +5,7 @@ import {
   getSingleOrder,
   createOrder,
   updateOrder,
+  updateDeliveryStatus,
   deleteOrder,
   //   getAllTheseOrders,
 } from '../controllers/order_controller.js'
@@ -14,9 +15,10 @@ const router = express.Router()
 
 router.get('/', protect, authorize, getAllOrders)
 router.get('/myorders', protect, getAllMyOrders)
-router.get('/:orderId', protect, authorize, getSingleOrder)
+router.get('/:orderId', protect, getSingleOrder)
 router.post('/', protect, authorize, createOrder)
 router.put('/:orderId/pay', protect, authorize, updateOrder)
+router.put('/:orderId/delivered', protect, authorize, updateDeliveryStatus)
 router.delete('/:orderId', protect, authorize, deleteOrder)
 
 export default router

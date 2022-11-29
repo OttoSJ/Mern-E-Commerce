@@ -8,14 +8,18 @@ import paymentReducer from '../redux-features/reducers_ajaxCalls/paymentMethodRe
 import orderReducer from '../redux-features/reducers_ajaxCalls/orderReducer'
 import orderPaymentReducer from '../redux-features/reducers_ajaxCalls/orderPaymentReducer'
 import userListReducer from '../redux-features/reducers_ajaxCalls/userReducer'
+import orderDeliveryReducer from '../redux-features/reducers_ajaxCalls/orderDeliveryReducer'
+import reviewReducer from '../redux-features/reducers_ajaxCalls/reviewReducer'
 
 export const store = configureStore({
   reducer: {
     products: productsReducer,
     productDetails: productDetailsReducer,
+    reviews: reviewReducer,
     cart: cartReducer,
     shipping: shippingReducer,
     paymentMethod: paymentReducer,
+    orderStatus: orderDeliveryReducer,
     order: orderReducer,
     orderPayment: orderPaymentReducer,
     auth: userReducer,
