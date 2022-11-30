@@ -4,6 +4,9 @@
   "description": "e-commerce web application",
   "main": "server.js",
   "type": "module",
+  "engines": {
+    "node": "18.5.0"
+  },
   "scripts": {
     "start": "node backend/server",
     "client": "npm start --prefix frontend",
