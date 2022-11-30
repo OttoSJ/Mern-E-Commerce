@@ -43,11 +43,22 @@ app.get('/api/config/paypal', (req, res) => {
 })
 
 const __dirname = path.resolve() // The __dirname onle works with commonjs not import syntax. So here I'm creating a variable for __dirname with the path module.
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
-app.get('/', (req, res) => {
-  res.send('Api is running')
-})
+if (process.env.NODE_ENV === 'production') {
+  // This creating a static path for the frontend build folder
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  // This is pointing the build folder for production
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  )
+} else {
+  app.get('/', (req, res) => {
+    res.send('Api is running')
+  })
+}
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 // Error handling middleware
 app.use(notFound)

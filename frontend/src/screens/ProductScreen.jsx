@@ -7,6 +7,7 @@ import { getProductById } from '../redux-features/reducers_ajaxCalls/singleProdu
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Meta from '../components/Meta'
 
 const ProductScreen = () => {
   const [qty, setQty] = useState(1)
@@ -39,82 +40,93 @@ const ProductScreen = () => {
       ) : isError ? (
         <Message variant="danger">{message}</Message>
       ) : (
-        <Row>
-          <Col md={6}>
-            <Image src={product?.image} alt={product?.name} fluid />
-          </Col>
-          <Col md={3}>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <h3>{product?.name}</h3>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Rating
-                  value={product?.rating}
-                  text={`${product?.numReviews} reviews`}
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>Price: ${product?.price}</ListGroup.Item>
-              <ListGroup.Item>
-                Description: {product?.description}
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>{' '}
-          <Col md={3}>
-            <Card>
+        <>
+          <Meta
+            title={product?.name}
+            description={product?.description}
+            keywords={''}
+          />
+          <Row>
+            <Col md={6}>
+              <Image src={product?.image} alt={product?.name} fluid />
+            </Col>
+            <Col md={3}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <Row>
-                    <Col>Price:</Col>
-                    <Col>
-                      <strong>${product?.price}</strong>
-                    </Col>
-                  </Row>
+                  <h3>{product?.name}</h3>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Rating
+                    value={product?.rating}
+                    text={`${product?.numReviews} reviews`}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>Price: ${product?.price}</ListGroup.Item>
+                <ListGroup.Item>
+                  Description: {product?.description}
                 </ListGroup.Item>
               </ListGroup>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Status</Col>
-                    <Col>
-                      {product?.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                {product?.countInStock > 0 && (
+            </Col>{' '}
+            <Col md={3}>
+              <Card>
+                <ListGroup variant="flush">
                   <ListGroup.Item>
                     <Row>
-                      <Col className="my-2">Qty</Col>
+                      <Col>Price:</Col>
                       <Col>
-                        <Form.Control
-                          as="select"
-                          value={qty}
-                          onChange={(e) => setQty(e.target.value)}
-                        >
-                          {[...Array(product?.countInStock).keys()].map((x) => (
-                            <option key={x + 1}>{Number(x) + 1}</option>
-                          ))}
-                        </Form.Control>
+                        <strong>${product?.price}</strong>
                       </Col>
                     </Row>
                   </ListGroup.Item>
-                )}
-                <ListGroup>
-                  <Button
-                    onClick={addToCartHandler}
-                    className="btn-block"
-                    type="button"
-                    disabled={product?.countInStock === 0}
-                  >
-                    {product?.countInStock === 0
-                      ? 'Out Of Stock'
-                      : 'Add To Cart'}
-                  </Button>
                 </ListGroup>
-              </ListGroup>
-            </Card>
-          </Col>
-        </Row>
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Status</Col>
+                      <Col>
+                        {product?.countInStock > 0
+                          ? 'In Stock'
+                          : 'Out Of Stock'}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  {product?.countInStock > 0 && (
+                    <ListGroup.Item>
+                      <Row>
+                        <Col className="my-2">Qty</Col>
+                        <Col>
+                          <Form.Control
+                            as="select"
+                            value={qty}
+                            onChange={(e) => setQty(e.target.value)}
+                          >
+                            {[...Array(product?.countInStock).keys()].map(
+                              (x) => (
+                                <option key={x + 1}>{Number(x) + 1}</option>
+                              )
+                            )}
+                          </Form.Control>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  )}
+                  <ListGroup>
+                    <Button
+                      onClick={addToCartHandler}
+                      className="btn-block"
+                      type="button"
+                      disabled={product?.countInStock === 0}
+                    >
+                      {product?.countInStock === 0
+                        ? 'Out Of Stock'
+                        : 'Add To Cart'}
+                    </Button>
+                  </ListGroup>
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
+        </>
       )}
     </>
   )
